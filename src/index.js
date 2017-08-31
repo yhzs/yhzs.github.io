@@ -1,27 +1,33 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import Root from './containers/Root'
 import registerServiceWorker from './registerServiceWorker';
-import {BrowserRouter, HashRouter, Route, NavLink } from 'react-router-dom';
+import 'antd/dist/antd.css';
+import {applyMiddleware, compose, createStore} from 'redux';
+import {Provider} from 'react-redux';
+import thunkMiddleware from 'redux-thunk'
+import logger from 'redux-logger'
+import reducer from './reducers'
+import DevTools from './containers/DevTools'
 
-// ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+function configureStore(initialState) {
+    const enhancer = compose(
+        applyMiddleware(
+            thunkMiddleware,
+            logger
+        ),
+        DevTools.instrument()
+    );
+    return createStore(reducer, initialState, enhancer);
+}
 
-const Home = () => (
-    <div>home</div>
-);
-const About = () => (
-    <div>about</div>
-);
+const store = configureStore({});
+
+
 ReactDOM.render(
-<BrowserRouter>
-    <div>
-    <NavLink exact={true} to="/"><button>home</button></NavLink >
-    <NavLink to="/about"><button>about</button></NavLink>
-    <Route exact={true} path="/" component={Home} />
-    <Route path="/about" component={About} />
-    </div>
-</BrowserRouter>
-    , document.getElementById('root')
-)
+    <Provider store={store}>
+        <Root/>
+    </Provider>,
+    document.getElementById('root')
+);
+registerServiceWorker();
