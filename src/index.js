@@ -9,6 +9,10 @@ import thunkMiddleware from 'redux-thunk'
 import logger from 'redux-logger'
 import reducer from './reducers'
 import DevTools from './containers/DevTools'
+import {BrowserRouter} from 'react-router-dom'
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+const {browserHistory} = BrowserRouter;
+
 
 function configureStore(initialState) {
     const enhancer = compose(
@@ -22,7 +26,7 @@ function configureStore(initialState) {
 }
 
 const store = configureStore({});
-
+// const history = syncHistoryWithStore(browserHistory, store)
 
 ReactDOM.render(
     <Provider store={store}>
