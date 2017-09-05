@@ -12,8 +12,8 @@ class MyHeader extends React.Component{
             selectedKeys: [],
             history : props.history
         };
-        console.log(props)
         this.linkTo = this.linkTo.bind(this)
+        // this.props.routing.
     }
 
     componentWillReceiveProps() {
@@ -25,11 +25,14 @@ class MyHeader extends React.Component{
     componentDidMount() {
         // this.setState({ selectedKeys: [this.context.router.location.pathname] });
         this.setState({ selectedKeys: [this.state.history.location.pathname]});
+        this.props.history.listen(event => {
+            this.setState({ selectedKeys: [event.pathname]});
+        })
     }
 
     linkTo(item) {
         // this.props.routing.push(item.key);
-        this.state.history.push(item.key)
+        this.props.history.push(item.key)
         this.setState({ selectedKeys: [item.key]});
     }
 
